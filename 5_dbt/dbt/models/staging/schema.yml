@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: staging
+    database: de-capstone-project
+    schema: raw
+
+    tables:
+      - name: pre_processed_partitioned
+
