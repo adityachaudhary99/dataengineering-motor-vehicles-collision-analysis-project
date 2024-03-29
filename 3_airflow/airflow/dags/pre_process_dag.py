@@ -35,7 +35,7 @@ BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'raw')
 OUTPUT_PATH = f"{AIRFLOW_HOME}/processed/{FILE_NAME}"
 
 
-def _pre_process_data():
+def _pre_process_data(csv_file):
     spark = SparkSession.builder \
         .master("local[*]") \
         .appName('test') \
@@ -45,7 +45,7 @@ def _pre_process_data():
                 .format('csv') \
                 .option('header','true') \
                 .option('inferSchema','true') \
-                .load(f"{AIRFLOW_HOME}/{data}")
+                .load(csv_file)
 
     columns_to_drop = ['LATITUDE','LONGITUDE','LOCATION','CROSS STREET NAME','OFF STREET NAME','CONTRIBUTING FACTOR VEHICLE 2','CONTRIBUTING FACTOR VEHICLE 3','CONTRIBUTING FACTOR VEHICLE 4','CONTRIBUTING FACTOR VEHICLE 5','VEHICLE TYPE CODE 2','VEHICLE TYPE CODE 3','VEHICLE TYPE CODE 4','VEHICLE TYPE CODE 5']
 
@@ -74,7 +74,7 @@ def _pre_process_data():
                     .withColumn("vehicle_type", F.col("vehicle_type").cast("string")) \
                     .withColumn('crash_time', F.date_format(F.col('crash_time'), 'HH:mm:ss')) \
                     .withColumn("crash_date", F.to_date(F.col("crash_date"),"MM/dd/yyyy")) \
-                    .withColumn('timestamp', F.to_timestamp(F.concat(F.col('crash_date'), F.lit(' '), F.col('crash_time')), 'yyyy-MM-dd HH:mm:ss')) \
+                    .withColumn('crash_timestamp', F.to_timestamp(F.concat(F.col('crash_date'), F.lit(' '), F.col('crash_time')), 'yyyy-MM-dd HH:mm:ss')) \
                     .withColumn("zip_code", F.col("zip_code").cast("int")) \
                     .withColumn("persons_injured", F.col("persons_injured").cast("int")) \
                     .withColumn("persons_killed", F.col("persons_killed").cast("int")) \
@@ -91,6 +91,15 @@ def _pre_process_data():
     spark_df.repartition(1).write.parquet(OUTPUT_PATH, mode='overwrite')
 
     spark.stop()
+
+
+def _process_files(**kwargs):
+    csv_directory = f"{AIRFLOW_HOME}/data"
+
+    csv_files = [os.path.join(csv_directory, f) for f in os.listdir(csv_directory) if f.endswith('.csv')]
+
+    for csv_file in csv_files:
+        _pre_process_data(csv_file)
 
 
 def _upload_to_gcs(bucket, object_name, local_path):
@@ -142,9 +151,10 @@ with DAG(
         bash_command=f"wget {url} -O {AIRFLOW_HOME}/{data}"
     )
 
-    pre_process_task = PythonOperator(
-        task_id="pre_process_task",
-        python_callable=_pre_process_data
+    process_files_task = PythonOperator(
+        task_id="process_files_task",
+        python_callable=_process_files,
+        provide_context=True
     )
 
     local_to_gcs_task = PythonOperator(
@@ -186,4 +196,4 @@ with DAG(
     )
 
 
-    download_dataset_task >> pre_process_task >> local_to_gcs_task >> gcs_to_bq >> bq_create_partitioned_table >> clean_up_task
+    download_dataset_task >> process_files_task >> local_to_gcs_task >> gcs_to_bq >> bq_create_partitioned_table >> clean_up_task
