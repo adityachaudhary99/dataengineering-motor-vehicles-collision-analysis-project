@@ -21,7 +21,7 @@ renamed as (
         -- timestamps, time, date
         timestamp as crash_timestamp,
         crash_date,
-        crash_time,
+        CAST(crash_time AS TIME) as crash_time,
 
         -- collisions info
         {{ dbt.safe_cast("persons_injured", api.Column.translate_type("integer")) }} as persons_injured,
@@ -42,7 +42,7 @@ renamed as (
 
 select * from renamed
 
--- dbt build --select <model.sql> --vars '{'is_test_run: false}'
+-- dbt build --select <model.sql> --vars '{'is_test_run':'false'}'
 {% if var('is_test_run', default=true) %}
 
   limit 100
