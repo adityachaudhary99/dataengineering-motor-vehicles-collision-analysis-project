@@ -1,0 +1,4 @@
+1_ingestion/data/dataframe.csv
+3_airflow/airflow/logs
+3_airflow/airflow/plugins
+3_airflow/airflow/.env
