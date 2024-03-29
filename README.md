@@ -52,6 +52,6 @@ Project was build on GCP Debian VM Instance, so you can find code snippets for t
 - Terraform
 
 ## Setup & Deploy
-1. Create cloud infrasctructure via Terraform. Look at instructions at [terraform dir](https://github.com/technomonah/CSSE_data_de/tree/main/terraform).
-2. Run Airflow in docker and trigger DAGs. Look at instructions at [airflow dir](https://github.com/technomonah/CSSE_data_de/tree/main/airflow).
+1. Create cloud infrasctructure via Terraform. Look at instructions at [terraform dir](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/tree/main/2_terraform).
+2. Run Airflow in docker and trigger DAGs. Look at instructions at [airflow dir](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/tree/main/3_airflow/airflow).
 3. Connect Google Data Studio dashboard to project BigQuery as a source.
