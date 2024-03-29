@@ -5,7 +5,9 @@ It's course project at data-engineering-zoomcamp by [DataTalksClub](https://gith
 For this project I've tried to build a batch pipeline to process motor vehicle collisions data in New York from ('https://catalog.data.gov/',An official website of the GSA's Technology Transformation Services).The Motor Vehicle Collisions crash table contains details on the crash event. Each row represents a crash event. The Motor Vehicle Collisions data tables contain information from all police reported motor vehicle collisions in NYC. The goal is to build a dasboard for monitoring ...
 
 ## Dataset
-[Motor Vehicle Collisions crash dataset]([https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data](https://data.cityofnewyork.us/api/views/h9gi-nx95/rows.csv?accessType=DOWNLOAD))
+[Motor Vehicle Collisions crash dataset website](https://catalog.data.gov/dataset/motor-vehicle-collisions-crashes/resource/b5a431d2-4832-43a6-9334-86b62bdb033f)
+
+[Motor Vehicle Collisions crash dataset direct link](https://data.cityofnewyork.us/api/views/h9gi-nx95/rows.csv?accessType=DOWNLOAD)
 
 ## Technologies
 - **Google cloud platform** (GCP):
@@ -41,7 +43,7 @@ Simple dashboard at Google Data studio with few graphs.
 - .
 
 # How to run project? 
-Project was build on GCP Debian VM Instance, so you can find code snippets for these particular case [here](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork).
+Project was build on GCP Debian VM Instance, so you can find code snippets for these particular case [here](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/blob/main/pre-reqs.md).
 
 ## Prereqs
 - Anaconda
