@@ -1,6 +1,10 @@
 # Motor-Vehicles-Collision-Data-Analysis-NewYork
 ### Identifying High-Risk Areas based on accident data.
 
+## Workflow/Architecture
+![alt text](./img/workflow.png)
+
+
 ## Project about 
 It's course project at data-engineering-zoomcamp by [DataTalksClub](https://github.com/DataTalksClub/data-engineering-zoomcamp).
 
