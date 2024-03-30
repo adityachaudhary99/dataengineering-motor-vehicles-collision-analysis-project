@@ -24,7 +24,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id = "gcs_to_dag",
+    dag_id = "gcs_to_bq_dag",
     schedule_interval="@once",
     default_args=default_args,
     start_date=dag_start_date,
