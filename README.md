@@ -19,16 +19,12 @@ Accidents can occur more frequently in certain neighborhoods or zip codes. Ident
   - Cloud Storage to store processed data.
   - BigQuery as data source for dashboard.
 - **Terraform** to create cloud infrastructure.
+- **Docker** for containerization (docker-compose)
+- **Python** main programming language
 - **Airflow** to run data pipelines as DAGs.
-- **PySpark** to pre-process raw data.
-- **dbt** to do analytics engineering. 
+- **Spark** to pre-process raw data.
+- **dbt** to perform transformations. 
 - **Google data studio** to visualize data.
-
-# Results 
-## Cloud infrastructure
-Except the VM Instance, all project infra setups with terraform: 
-- Data Lake for all of the project data.
-- BigQuery for transformed data tablels as source for dashboard.
 
 ## Data pipelines
 The dataset data download, process and upload to cloud storage, transfer to data warehouse is done via these Airflow DAGs:
@@ -50,19 +46,65 @@ For more details, Please refer [here](https://github.com/adityachaudhary99/Motor
 
 ## Dashboard
 Simple dashboard at Google Data studio with few graphs.
-- .
-- .
+- Accident Heatmap by Borough.
+- Time-of-Day​ Accident Distribution.​
+- Contributing Factors Pie Chart​.
+- Top 10 Riskiest Neighborhoods.
 
-# How to run project? 
-Project was build on GCP Debian VM Instance, so you can find code snippets for these particular case [here](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/blob/main/pre-reqs.md).
+# Reproducing from scratch
+## 1. To reproduce this code entirely from scratch, you will need to create a GCP account:
+Set up your free GCP account! You'll get free $300 credit or 90 days of free usage.
+**Project was build on GCP Debian VM Instance, so you can find code snippets for these particular case [here](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/blob/main/pre-reqs.md).**
 
+* Set up your  very own [service account](https://cloud.google.com/)
+* Create key in JSON
+* Save to your directory
+* download and install [Google Cloud CLI](https://cloud.google.com/sdk/docs/install)
+* run `export GOOGLE_APPLICATION_CREDENTIALS=<path/to/service/key>.json`
+* run `gcloud auth application-default login`
+* new browser window will pop up having you authenticate the gcloud CLI. Make sure it says `You are now authenticated with the gcloud CLI!`
+
+## Next for GCP: Add permissions to your Service Account!
+* IAM & Admin > IAM. Click on the edit icon for your project
+* Add roles
+    * Storage Admin (for the bucket)
+    * Storage Object Admin (for objects in the bucket -- read/write/create/delete)
+    * BigQuery Admin
+* Enable APIs
+    * https://console.cloud.google.com/apis/library/iam.googleapis.com
+    * https://console.cloud.google.com/apis/library/iamcredentials.googleapis.com
+
+## 2. You'll need your IaC to build your infrastructure. In this project, Terraform is used
+Download Terraform!
+* Download here: https://www.terraform.io/downloads
+
+Initializing Terraform
+* Create a new directory with `main.tf`, and initialize your config file. [How to Start](https://learn.hashicorp.com/tutorials/terraform/google-cloud-platform-build?in=terraform/gcp-get-started)
+    * *OPTIONAL* Create `variables.tf` files to store your variables
+* `terraform init`
+* `terraform plan`
+* `terraform apply`
+
+## 3. Set up Docker, Dockerfile, and docker-compose to run Airflow
+Just copy the Dockerfile, docker-compose.yaml, requirements.txt from [here](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/tree/main/3_airflow/airflow). Then create a .env file in the same directory you have copied the above files with and paste `AIRFLOW_UID=50000` in the file. After that go to terminal and change the directory to the directory you have pasted these files in and run `docker-compose up -d`. This should set up the airflow environment for you given you have docker installed.
+
+## 4. Run the DAGs
+In the screenshot below:
+* run the `local_to_gcs_dag` first and wait for it to complete. 
+* The last task in the `local_to_gcs_dag` will trigger the `gcs_to_bq_dag` and it will run shortly.
+
+## 5. Create your dashboard
+* Go to [Google Data Studio](https://datastudio.google.com) 
+* Click `Create` > `Data Source`
+* Select `BigQuery` > Your Project ID > Dataset > Table
+* Click on `Connect` on the top-right and your data should now be imported to use for your dashboard!
+
+Below is a screenshot of my [dashboard](https://lookerstudio.google.com/reporting/c86f75eb-00f6-4b0f-8175-3f9ebd2e65df).
+![alt text](./img/Dashboard.png)
+
+Thank you again to everyone for their dedication and support! If you have any questions, please feel free to open a PR or send me an email. Bless!
 ## Prereqs
 - Anaconda
 - Docker + Docker-compose
 - GCP project
 - Terraform
-
-## Setup & Deploy
-1. Create cloud infrasctructure via Terraform. Look at instructions at [terraform dir](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/tree/main/2_terraform).
-2. Run Airflow in docker and trigger DAGs. Look at instructions at [airflow dir](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/tree/main/3_airflow/airflow).
-3. Connect Google Data Studio dashboard to project BigQuery as a source.
