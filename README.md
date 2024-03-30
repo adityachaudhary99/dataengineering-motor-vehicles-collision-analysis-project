@@ -41,10 +41,6 @@ The dataset data download, process and upload to cloud storage, transfer to data
   - Followed by creation of a partitioned and clustered table at project BigQuery dataset.
   - Lastly local clean up is done to erase the data from the local system.
 
-## Analytics Engineering (dbt) - 
-This project uses dbt to perform transformations and make schemas for the BigQuery tables.
-For more details, Please refer [here](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/blob/main/5_dbt/)
-
 ## Dashboard
 Simple dashboard at Google Data studio with few graphs.
 - Accident Heatmap by Borough.
