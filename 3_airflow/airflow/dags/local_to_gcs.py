@@ -1,23 +1,17 @@
 import os
-import pandas as pd
 import glob
 
 from airflow import DAG
-from airflow.providers.google.cloud.operators.bigquery import BigQueryExecuteQueryOperator
-from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 
-import pyspark
 from pyspark.sql import SparkSession
-from pyspark.conf import SparkConf
-from pyspark.context import SparkContext
-from pyspark.sql import types
 from pyspark.sql import functions as F
 
 from google.cloud import storage
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 url = 'https://data.cityofnewyork.us/api/views/h9gi-nx95/rows.csv?accessType=DOWNLOAD'
 
@@ -138,10 +132,10 @@ default_args = {
 }
 
 with DAG(
-    dag_id = "pre_process_dag",
+    dag_id = "local_to_gcs_dag",
     schedule_interval="@once",
     default_args=default_args,
-    start_date=datetime.now(),
+    start_date=datetime(2024, 2, 30),
     catchup=False,
     max_active_runs=1
 ) as dag:
@@ -167,33 +161,7 @@ with DAG(
         },
     )
 
-    gcs_to_bq = GCSToBigQueryOperator(
-        task_id='gcs_to_bq',
-        bucket=BUCKET,
-        source_objects=[f"processed/{FILE_NAME}/*.parquet"],
-        destination_project_dataset_table='de-capstone-project.raw.pre_processed',
-        source_format='PARQUET',
-        write_disposition='WRITE_TRUNCATE',
-        bigquery_conn_id='google_cloud_default',
-        google_cloud_storage_conn_id='google_cloud_default'
-    )
+    trigger_gcs_to_bq = TriggerDagRunOperator(task_id='trigger_gcs_to_bq', 
+                                     trigger_dag_id='gcs_to_bq_dag')    
 
-    bq_create_partitioned_table = BigQueryExecuteQueryOperator(
-        task_id=f"bq_create_partitioned_table",
-        sql='''
-        CREATE OR REPLACE TABLE `de-capstone-project.raw.pre_processed_partitioned`
-        PARTITION BY DATE_TRUNC(timestamp, MONTH)
-        CLUSTER BY borough
-        AS SELECT * FROM `de-capstone-project.raw.pre_processed`
-        ''',
-        use_legacy_sql=False,
-        bigquery_conn_id='google_cloud_default'
-    )
-
-    clean_up_task = BashOperator(
-        task_id="clean_up_raw_task",
-        bash_command=f"rm -r {AIRFLOW_HOME}/data/*"
-    )
-
-
-    download_dataset_task >> process_files_task >> local_to_gcs_task >> gcs_to_bq >> bq_create_partitioned_table >> clean_up_task
+    download_dataset_task >> process_files_task >> local_to_gcs_task >> trigger_gcs_to_bq
