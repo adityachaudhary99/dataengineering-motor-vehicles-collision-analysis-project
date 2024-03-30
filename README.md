@@ -1,8 +1,12 @@
 # Motor-Vehicles-Collision-Data-Analysis-NewYork
+### Identifying High-Risk Areas based on accident data.
+
 ## Project about 
 It's course project at data-engineering-zoomcamp by [DataTalksClub](https://github.com/DataTalksClub/data-engineering-zoomcamp).
 
-For this project I've tried to build a batch pipeline to process motor vehicle collisions data in New York from ('https://catalog.data.gov/',An official website of the GSA's Technology Transformation Services).The Motor Vehicle Collisions crash table contains details on the crash event. Each row represents a crash event. The Motor Vehicle Collisions data tables contain information from all police reported motor vehicle collisions in NYC. The goal is to build a dasboard for monitoring ...
+## Problem: Identifying High-Risk Areas
+For this project I've tried to build a batch pipeline to process motor vehicle collisions data in New York from ('https://catalog.data.gov/',An official website of the GSA's Technology Transformation Services).The Motor Vehicle Collisions crash table contains details on the crash event. Each row represents a crash event. The Motor Vehicle Collisions data tables contain information from all police reported motor vehicle collisions/accidents in NYC. 
+Accidents can occur more frequently in certain neighborhoods or zip codes. Identifying these high-risk areas is crucial for improving safety measures, allocating resources effectively, and preventing accidents. **We want to pinpoint the locations where accidents are most likely to happen.**
 
 ## Dataset
 [Motor Vehicle Collisions crash dataset website](https://catalog.data.gov/dataset/motor-vehicle-collisions-crashes/resource/b5a431d2-4832-43a6-9334-86b62bdb033f)
@@ -27,15 +31,21 @@ Except the VM Instance, all project infra setups with terraform:
 - BigQuery for transformed data tablels as source for dashboard.
 
 ## Data pipelines
-The dataset data download, process and upload to cloud storage via Airflow DAGs:
-**Pre-process Dag** 
+The dataset data download, process and upload to cloud storage, transfer to data warehouse is done via these Airflow DAGs:
+**Local to GCS Dag** 
   - Runs once since there is a single dataset, can be changed accordingly though. 
   - Downloads the dataset file in the csv format. This task runs by a bash script, which downloads the data. 
   - Next the data is pre-processed using pyspark(changing column names, data types, etc) and saves it locally in the form of parquet file. 
-  - This file is then uploaded to project Cloud Storage.
-  - Then the next task creates a table in the project BigQuery dataset made earlier using terraform using terraform and transfers the data in parquet files in the project Cloud Storage to the project BigQuery table.
+  - This file is then uploaded to project Cloud Storage(Data Lake).
+  - Last task triggers the <code>gcs_to_bq_dag</code> so that it runs right after the data has been loaded to project Cloud Storage.
+
+ **GCS to BQ Dag**
+  - The dag transfers the data in parquet files in the project Cloud Storage to the project BigQuery dataset made earlier using terraform.
   - Followed by creation of a partitioned and clustered table at project BigQuery dataset.
   - Lastly local clean up is done to erase the data from the local system.
+
+## Analytics Engineering (dbt) - 
+Please refer [here](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/blob/5_dbt/README.md)
 
 ## Dashboard
 Simple dashboard at Google Data studio with few graphs.
