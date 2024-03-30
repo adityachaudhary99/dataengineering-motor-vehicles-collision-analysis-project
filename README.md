@@ -26,28 +26,6 @@ Accidents can occur more frequently in certain neighborhoods or zip codes. Ident
 - **dbt** to perform transformations. 
 - **Google data studio** to visualize data.
 
-## Data pipelines
-The dataset data download, process and upload to cloud storage, transfer to data warehouse is done via these Airflow DAGs:
-
-**Local to GCS Dag** 
-  - Runs once since there is a single dataset, can be changed accordingly though. 
-  - Downloads the dataset file in the csv format. This task runs by a bash script, which downloads the data. 
-  - Next the data is pre-processed using pyspark(changing column names, data types, etc) and saves it locally in the form of parquet file. 
-  - This file is then uploaded to project Cloud Storage(Data Lake).
-  - Last task triggers the <code>gcs_to_bq_dag</code> so that it runs right after the data has been loaded to project Cloud Storage.
-
- **GCS to BQ Dag**
-  - The dag transfers the data in parquet files in the project Cloud Storage to the project BigQuery dataset made earlier using terraform.
-  - Followed by creation of a partitioned and clustered table at project BigQuery dataset.
-  - Lastly local clean up is done to erase the data from the local system.
-
-## Dashboard
-Simple dashboard at Google Data studio with few graphs.
-- Accident Heatmap by Borough.
-- Time-of-Day​ Accident Distribution.​
-- Contributing Factors Pie Chart​.
-- Top 10 Riskiest Neighborhoods.
-
 # Reproducing from scratch
 ## 1. To reproduce this code entirely from scratch, you will need to create a GCP account:
 Set up your free GCP account! You'll get free $300 credit or 90 days of free usage.
@@ -83,6 +61,23 @@ Initializing Terraform
 * `terraform apply`
 
 ## 3. Set up Docker, Dockerfile, and docker-compose to run Airflow
+
+#### Data pipelines
+The dataset data download, process and upload to cloud storage, transfer to data warehouse is done via these Airflow DAGs:
+
+**Local to GCS Dag** 
+  - Runs once since there is a single dataset, can be changed accordingly though. 
+  - Downloads the dataset file in the csv format. This task runs by a bash script, which downloads the data. 
+  - Next the data is pre-processed using pyspark(changing column names, data types, etc) and saves it locally in the form of parquet file. 
+  - This file is then uploaded to project Cloud Storage(Data Lake).
+  - Last task triggers the <code>gcs_to_bq_dag</code> so that it runs right after the data has been loaded to project Cloud Storage.
+
+ **GCS to BQ Dag**
+  - The dag transfers the data in parquet files in the project Cloud Storage to the project BigQuery dataset made earlier using terraform.
+  - Followed by creation of a partitioned and clustered table at project BigQuery dataset.
+  - Lastly local clean up is done to erase the data from the local system.
+
+
 Just copy the Dockerfile, docker-compose.yaml, requirements.txt from [here](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/tree/main/3_airflow/airflow). Then create a .env file in the same directory you have copied the above files with and paste `AIRFLOW_UID=50000` in the file. After that go to terminal and change the directory to the directory you have pasted these files in and run `docker-compose up -d`. This should set up the airflow environment for you given you have docker installed.
 
 ## 4. Run the DAGs
@@ -90,20 +85,20 @@ In the screenshot below:
 * run the `local_to_gcs_dag` first and wait for it to complete. 
 * The last task in the `local_to_gcs_dag` will trigger the `gcs_to_bq_dag` and it will run shortly.
 
-## dbt cloud setup and environment
+## 5. dbt cloud setup and environment
 For setting up the dbt cloud environment you can refer to [here](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/04-analytics-engineering/dbt_cloud_setup.md).
 
-### Some screenshots from dbt cloud setup for the project-
-### Production Environment - 
+Some screenshots from dbt cloud setup for the project-
+#### Production Environment - 
 ![alt text](./img/Screenshot 2024-03-30 002325.png)
 
-### Scheduled pipeline to fetch fresh data from sources everyday -  
+#### Scheduled pipeline to fetch fresh data from sources everyday -  
 ![alt text](./img/Screenshot 2024-03-30 002538.png)
 
-### Continuation Integration Pipeline -
+#### Continuation Integration Pipeline -
 ![alt text](./img/Screenshot 2024-03-30 003454.png)
 
-### dbt mmodels lineage Graph
+#### dbt mmodels lineage Graph
 ![alt text](./img/Screenshot 2024-03-30 160406.png)
 
 ### 6. Create your dashboard
@@ -111,6 +106,13 @@ For setting up the dbt cloud environment you can refer to [here](https://github.
 * Click `Create` > `Data Source`
 * Select `BigQuery` > Your Project ID > Dataset > Table
 * Click on `Connect` on the top-right and your data should now be imported to use for your dashboard!
+
+#### Dashboard
+Simple dashboard at Google Data studio with few graphs.
+- Accident Heatmap by Borough.
+- Time-of-Day​ Accident Distribution.​
+- Contributing Factors Pie Chart​.
+- Top 10 Riskiest Neighborhoods.
 
 Below is a screenshot of my [dashboard](https://lookerstudio.google.com/reporting/c86f75eb-00f6-4b0f-8175-3f9ebd2e65df).
 ![alt text](./img/Dashboard.png)
