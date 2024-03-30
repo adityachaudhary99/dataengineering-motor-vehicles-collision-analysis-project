@@ -4,7 +4,65 @@ sources:
   - name: staging
     database: de-capstone-project
     schema: raw
-
     tables:
       - name: pre_processed_partitioned
 
+models:
+  - name: staging_accidents
+    description: >
+      Staging model for raw accident data. Contains columns from the source data table.
+    columns:
+      - name: collision_key
+        description: Unique surrogate key for the table.
+        data_type: integer
+      - name: collision_id
+        description: Unique identifier for each accident.
+        data_type: integer
+      - name: crash_date
+        description: Date of the accident.
+        data_type: date
+      - name: crash_time
+        description: Time of the accident.
+        data_type: string
+      - name: crash_timestamp
+        description: Timestamp of the accident.
+        data_type: timestamp
+      - name: borough
+        description: The borough where the accident occurred.
+        data_type: string
+      - name: zip_code
+        description: The zip code of the accident location.
+        data_type: string
+      - name: street_name
+        description: The name of the street where the accident occurred.
+        data_type: string
+      - name: persons_injured
+        description: Number of persons injured.
+        data_type: integer
+      - name: persons_killed
+        description: Number of persons killed.
+        data_type: integer
+      - name: pedestrians_injured
+        description: Number of pedestrians injured.
+        data_type: integer
+      - name: pedestrians_killed
+        description: Number of pedestrians killed.
+        data_type: integer
+      - name: cyclists_injured
+        description: Number of cyclists injured.
+        data_type: integer
+      - name: cyclists_killed
+        description: Number of cyclists killed.
+        data_type: integer
+      - name: motorists_injured
+        description: Number of motorists injured.
+        data_type: integer
+      - name: motorists_killed
+        description: Number of motorists killed.
+        data_type: integer
+      - name: contributing_factor
+        description: Factor that contributed to the accident.
+        data_type: string
+      - name: vehicle_type
+        description: Type of vehicle involved in the accident.
+        data_type: string

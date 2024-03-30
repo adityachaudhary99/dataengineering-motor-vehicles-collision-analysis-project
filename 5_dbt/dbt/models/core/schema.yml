@@ -1,0 +1,110 @@
+version: 2
+
+# Fact Table: Accidents
+models:
+  - name: accidents_fact
+    description: >
+      Aggregated accident data including the number of persons injured, killed, pedestrians injured, pedestrians killed, cyclists injured, cyclists killed, and motorists injured.
+    columns:
+      - name: collision_id
+        description: Unique identifier for each accident.
+        tests:
+          - unique
+      - name: crash_date
+        description: Date of the accident.
+        data_type: date
+      - name: crash_time
+        description: Time of the accident.
+        data_type: string
+      - name: total_persons_injured
+        description: Total number of persons injured.
+        data_type: integer
+      - name: total_persons_killed
+        description: Total number of persons killed.
+        data_type: integer
+      - name: total_pedestrians_injured
+        description: Total number of pedestrians injured.
+        data_type: integer
+      - name: total_pedestrians_killed
+        description: Total number of pedestrians killed.
+        data_type: integer
+      - name: total_cyclists_injured
+        description: Total number of cyclists injured.
+        data_type: integer
+      - name: total_cyclists_killed
+        description: Total number of cyclists killed.
+        data_type: integer
+      - name: total_motorists_injured
+        description: Total number of motorists injured.
+        data_type: integer
+      - name: total_motorists_killed
+        description: Total number of motorists killed.
+        data_type: integer
+
+
+  # Dimension Table: Location
+  - name: location_dim
+    description: >
+      Location information related to accidents, including borough, zip code, and street name.
+    columns:
+      - name: zip_code
+        description: Zip code of the accident location.
+        data_type: string
+      - name: borough
+        description: Borough where the accident occurred.
+        data_type: string
+      - name: street_name
+        description: Name of the street where the accident occurred.
+        data_type: string
+      - name: dim_location_key
+        description: Surrogate key for the location.
+        data_type: integer
+
+
+  # Dimension Table: Contributing Factors
+  - name: contributing_factors_dim
+    description: >
+      Contributing factors for accidents, such as speeding, distracted driving, etc.
+    columns:
+      - name: collision_id
+        description: Unique identifier for each accident.
+        tests:
+          - unique
+      - name: contributing_factor
+        description: Factor that contributed to the accident.
+        data_type: string
+      - name: dim_contributing_factors_key
+        description: Surrogate key for the contributing factor.
+        data_type: integer
+
+
+  # Dimension Table: Vehicle Types
+  - name: vehicle_types_dim
+    description: >
+      Types of vehicles involved in accidents (e.g., car, truck, bicycle).
+    columns:
+      - name: collision_id
+        description: Unique identifier for each accident.
+        tests:
+          - unique
+      - name: vehicle_type
+        description: Type of vehicle involved in the accident.
+        data_type: string
+      - name: dim_vehicle_types_key
+        description: Surrogate key for the vehicle type.
+        data_type: integer
+
+# Relationships
+relationships:
+  - name: accidents_to_location
+    description: Relationship between accidents_fact and location_dim using zip_code.
+    from: accidents_fact.zip_code
+    to: location_dim.zip_code
+  - name: accidents_to_contributing_factors
+    description: Relationship between accidents_fact and contributing_factors_dim using collision_id.
+    from: accidents_fact.collision_id
+    to: contributing_factors_dim.collision_id
+  - name: accidents_to_vehicle_types
+    description: Relationship between accidents_fact and vehicle_types_dim using collision_id.
+    from: accidents_fact.collision_id
+    to: vehicle_types_dim.collision_id
