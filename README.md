@@ -90,16 +90,16 @@ For setting up the dbt cloud environment you can refer to [here](https://github.
 
 Some screenshots from dbt cloud setup for the project-
 #### Production Environment - 
-![alt text](./img/Screenshot%2024-03-30%20002325.png)
+![alt text](./img/production_env.png)
 
 #### Scheduled pipeline to fetch fresh data from sources everyday -  
-![alt text](./img/Screenshot%2024-03-30%20002538.png)
+![alt text](./img/production_pipeline.png)
 
 #### Continuation Integration Pipeline -
-![alt text](./img/Screenshot%2024-03-30%20003454.png)
+![alt text](./img/continuous_integration_pipeline.png)
 
 #### dbt mmodels lineage Graph
-![alt text](./img/Screenshot%2024-03-30%20160406.png)
+![alt text](./img/LineageGraph.png)
 
 ### 6. Create your dashboard
 * Go to [Google Data Studio](https://datastudio.google.com) 
