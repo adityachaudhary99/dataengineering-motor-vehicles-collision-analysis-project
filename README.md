@@ -98,7 +98,7 @@ Some screenshots from dbt cloud setup for the project-
 #### Continuation Integration Pipeline -
 ![alt text](./img/continuous_integration_pipeline.png)
 
-#### dbt mmodels lineage Graph
+#### dbt models lineage Graph
 ![alt text](./img/LineageGraph.png)
 
 ### 6. Create your dashboard
