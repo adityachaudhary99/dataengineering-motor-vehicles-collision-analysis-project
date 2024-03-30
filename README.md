@@ -93,7 +93,23 @@ In the screenshot below:
 * run the `local_to_gcs_dag` first and wait for it to complete. 
 * The last task in the `local_to_gcs_dag` will trigger the `gcs_to_bq_dag` and it will run shortly.
 
-## 5. Create your dashboard
+## dbt cloud setup and environment
+For setting up the dbt cloud environment you can refer to [here](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/04-analytics-engineering/dbt_cloud_setup.md).
+
+### Some screenshots from dbt cloud setup for the project-
+### Production Environment - 
+![alt text](./img/Screenshot 2024-03-30 002325.png)
+
+### Scheduled pipeline to fetch fresh data from sources everyday -  
+![alt text](./img/Screenshot 2024-03-30 002538.png)
+
+### Continuation Integration Pipeline -
+![alt text](./img/Screenshot 2024-03-30 003454.png)
+
+### dbt mmodels lineage Graph
+![alt text](./img/Screenshot 2024-03-30 160406.png)
+
+### 6. Create your dashboard
 * Go to [Google Data Studio](https://datastudio.google.com) 
 * Click `Create` > `Data Source`
 * Select `BigQuery` > Your Project ID > Dataset > Table
