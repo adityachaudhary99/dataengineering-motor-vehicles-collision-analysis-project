@@ -1,4 +1,7 @@
-{{ config(materialized='view') }}
+{{ config(
+    materialized='view',
+    description='Staging model for raw accident data with surrogate key'
+) }}
 
 with 
 
@@ -12,7 +15,7 @@ renamed as (
 
     select
         -- identifiers
-        {{ dbt_utils.generate_surrogate_key(['collision_id', 'timestamp']) }} as collision_key,    
+        {{ dbt_utils.generate_surrogate_key(['collision_id', 'zip_code']) }} as collision_key,    
         {{ dbt.safe_cast("collision_id", api.Column.translate_type("integer")) }} as collision_id,
         {{ dbt.safe_cast("zip_code", api.Column.translate_type("integer")) }} as zip_code,
         {{ title_case('borough') }} as borough,
@@ -41,10 +44,3 @@ renamed as (
 )
 
 select * from renamed
-
--- dbt build --select <model.sql> --vars '{'is_test_run':'false'}'
-{% if var('is_test_run', default=true) %}
-
-  limit 100
-
-{% endif %}
