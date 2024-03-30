@@ -28,6 +28,7 @@ Accidents can occur more frequently in certain neighborhoods or zip codes. Ident
 
 ## Data pipelines
 The dataset data download, process and upload to cloud storage, transfer to data warehouse is done via these Airflow DAGs:
+
 **Local to GCS Dag** 
   - Runs once since there is a single dataset, can be changed accordingly though. 
   - Downloads the dataset file in the csv format. This task runs by a bash script, which downloads the data. 
