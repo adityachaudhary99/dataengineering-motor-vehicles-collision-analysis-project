@@ -121,9 +121,4 @@ Simple dashboard at Google Data studio with few graphs.
 Below is a screenshot of my [dashboard](https://lookerstudio.google.com/reporting/c86f75eb-00f6-4b0f-8175-3f9ebd2e65df).
 ![alt text](./img/Dashboard.png)
 
-Thank you again to everyone for their dedication and support! If you have any questions, please feel free to open a PR or send me an email. Bless!
-## Prereqs
-- Anaconda
-- Docker + Docker-compose
-- GCP project
-- Terraform
+Thanks to the DataTalksClub for the oppurtunity! If you have any questions, please feel free to open a PR or send me an email.
