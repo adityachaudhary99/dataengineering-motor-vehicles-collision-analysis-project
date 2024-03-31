@@ -53,3 +53,10 @@ rm https://releases.hashicorp.com/terraform/1.1.9/terraform_1.1.9_linux_amd64.zi
 cd ~ && mkdir -p ~/.google/credentials/
 mv <path/to/your/service-account-authkeys>.json ~/.google/credentials/google_credentials.json 
 ```
+
+
+## Other Prereqs
+- Anaconda
+- Docker + Docker-compose
+- GCP project
+- Terraform
