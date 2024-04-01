@@ -83,7 +83,6 @@ The dataset data download, process and upload to cloud storage, transfer to data
   - Lastly local clean up is done to erase the data from the local system.
 
 ## 4. Run the DAGs
-In the screenshot below:
 * run the `local_to_gcs_dag` first and wait for it to complete. 
 * The last task in the `local_to_gcs_dag` will trigger the `gcs_to_bq_dag` and it will run shortly.
 
