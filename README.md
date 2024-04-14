@@ -65,6 +65,7 @@ Initializing Terraform
 * `terraform apply`
 
 ## 3. Set up Docker, Dockerfile, and docker-compose to run Airflow
+To set up airflow, you can refer to this [link](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/cohorts/2022/week_2_data_ingestion/airflow)
 
 #### Data pipelines
 The dataset data download, process and upload to cloud storage, transfer to data warehouse is done via these Airflow DAGs:
@@ -81,11 +82,7 @@ The dataset data download, process and upload to cloud storage, transfer to data
   - Followed by creation of a partitioned and clustered table at project BigQuery dataset.
   - Lastly local clean up is done to erase the data from the local system.
 
-
-Just copy the Dockerfile, docker-compose.yaml, requirements.txt from [here](https://github.com/adityachaudhary99/Motor-Vehicles-Collision-Data-Analysis-NewYork/tree/main/3_airflow/airflow). Then create a .env file in the same directory you have copied the above files with and paste `AIRFLOW_UID=50000` in the file. After that go to terminal and change the directory to the directory you have pasted these files in and run `docker-compose up -d`. This should set up the airflow environment for you given you have docker installed.
-
 ## 4. Run the DAGs
-In the screenshot below:
 * run the `local_to_gcs_dag` first and wait for it to complete. 
 * The last task in the `local_to_gcs_dag` will trigger the `gcs_to_bq_dag` and it will run shortly.
 
