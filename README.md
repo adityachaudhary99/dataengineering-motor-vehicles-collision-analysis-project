@@ -116,6 +116,7 @@ Simple dashboard at Google Data studio with few graphs.
 - Top 10 Riskiest Neighborhoods.
 
 Below is a screenshot of my [dashboard](https://lookerstudio.google.com/reporting/c86f75eb-00f6-4b0f-8175-3f9ebd2e65df).
+
 ![alt text](./img/Dashboard.png)
 
 Thanks to the DataTalksClub for the oppurtunity! If you have any questions, please feel free to open a PR or send me an email.
